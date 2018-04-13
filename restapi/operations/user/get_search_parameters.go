@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -33,9 +34,10 @@ type GetSearchParams struct {
 	HTTPRequest *http.Request `json:"-"`
 
 	/*user id
-	  In: query
+	  Required: true
+	  In: formData
 	*/
-	UserID *int64
+	UserID int32
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -47,10 +49,17 @@ func (o *GetSearchParams) BindRequest(r *http.Request, route *middleware.Matched
 
 	o.HTTPRequest = r
 
-	qs := runtime.Values(r.URL.Query())
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		if err != http.ErrNotMultipart {
+			return errors.New(400, "%v", err)
+		} else if err := r.ParseForm(); err != nil {
+			return errors.New(400, "%v", err)
+		}
+	}
+	fds := runtime.Values(r.Form)
 
-	qUserID, qhkUserID, _ := qs.GetOK("user_id")
-	if err := o.bindUserID(qUserID, qhkUserID, route.Formats); err != nil {
+	fdUserID, fdhkUserID, _ := fds.GetOK("user_id")
+	if err := o.bindUserID(fdUserID, fdhkUserID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -61,22 +70,25 @@ func (o *GetSearchParams) BindRequest(r *http.Request, route *middleware.Matched
 }
 
 func (o *GetSearchParams) bindUserID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("user_id", "formData")
+	}
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
 
-	// Required: false
-	// AllowEmptyValue: false
-	if raw == "" { // empty values pass all other validations
-		return nil
+	// Required: true
+
+	if err := validate.RequiredString("user_id", "formData", raw); err != nil {
+		return err
 	}
 
-	value, err := swag.ConvertInt64(raw)
+	value, err := swag.ConvertInt32(raw)
 	if err != nil {
-		return errors.InvalidType("user_id", "query", "int64", raw)
+		return errors.InvalidType("user_id", "formData", "int32", raw)
 	}
-	o.UserID = &value
+	o.UserID = value
 
 	return nil
 }

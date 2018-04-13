@@ -20,7 +20,9 @@ paths:
       parameters:
         - name: user_id
           type: integer
-          in: query
+          in: formData
+          format: int32
+          required: true
           description: user id
       responses:
         '200':

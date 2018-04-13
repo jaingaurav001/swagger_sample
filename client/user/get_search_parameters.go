@@ -67,7 +67,7 @@ type GetSearchParams struct {
 	  user id
 
 	*/
-	UserID *int64
+	UserID int32
 
 	timeout    time.Duration
 	Context    context.Context
@@ -108,13 +108,13 @@ func (o *GetSearchParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithUserID adds the userID to the get search params
-func (o *GetSearchParams) WithUserID(userID *int64) *GetSearchParams {
+func (o *GetSearchParams) WithUserID(userID int32) *GetSearchParams {
 	o.SetUserID(userID)
 	return o
 }
 
 // SetUserID adds the userId to the get search params
-func (o *GetSearchParams) SetUserID(userID *int64) {
+func (o *GetSearchParams) SetUserID(userID int32) {
 	o.UserID = userID
 }
 
@@ -126,20 +126,13 @@ func (o *GetSearchParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 	}
 	var res []error
 
-	if o.UserID != nil {
-
-		// form param user_id
-		var frUserID int64
-		if o.UserID != nil {
-			frUserID = *o.UserID
+	// form param user_id
+	frUserID := o.UserID
+	fUserID := swag.FormatInt32(frUserID)
+	if fUserID != "" {
+		if err := r.SetFormParam("user_id", fUserID); err != nil {
+			return err
 		}
-		fUserID := swag.FormatInt64(frUserID)
-		if fUserID != "" {
-			if err := r.SetFormParam("user_id", fUserID); err != nil {
-				return err
-			}
-		}
-
 	}
 
 	if len(res) > 0 {

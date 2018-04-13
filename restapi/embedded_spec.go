@@ -45,9 +45,11 @@ func init() {
         "parameters": [
           {
             "type": "integer",
+            "format": "int32",
             "description": "user id",
             "name": "user_id",
-            "in": "query"
+            "in": "formData",
+            "required": true
           }
         ],
         "responses": {
@@ -122,9 +124,11 @@ func init() {
         "parameters": [
           {
             "type": "integer",
+            "format": "int32",
             "description": "user id",
             "name": "user_id",
-            "in": "query"
+            "in": "formData",
+            "required": true
           }
         ],
         "responses": {
