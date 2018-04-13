@@ -33,7 +33,7 @@ type GetSearchParams struct {
 	HTTPRequest *http.Request `json:"-"`
 
 	/*user id
-	  In: formData
+	  In: query
 	*/
 	UserID *int64
 }
@@ -47,17 +47,10 @@ func (o *GetSearchParams) BindRequest(r *http.Request, route *middleware.Matched
 
 	o.HTTPRequest = r
 
-	if err := r.ParseMultipartForm(32 << 20); err != nil {
-		if err != http.ErrNotMultipart {
-			return errors.New(400, "%v", err)
-		} else if err := r.ParseForm(); err != nil {
-			return errors.New(400, "%v", err)
-		}
-	}
-	fds := runtime.Values(r.Form)
+	qs := runtime.Values(r.URL.Query())
 
-	fdUserID, fdhkUserID, _ := fds.GetOK("user_id")
-	if err := o.bindUserID(fdUserID, fdhkUserID, route.Formats); err != nil {
+	qUserID, qhkUserID, _ := qs.GetOK("user_id")
+	if err := o.bindUserID(qUserID, qhkUserID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -74,14 +67,14 @@ func (o *GetSearchParams) bindUserID(rawData []string, hasKey bool, formats strf
 	}
 
 	// Required: false
-
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
 
 	value, err := swag.ConvertInt64(raw)
 	if err != nil {
-		return errors.InvalidType("user_id", "formData", "int64", raw)
+		return errors.InvalidType("user_id", "query", "int64", raw)
 	}
 	o.UserID = &value
 

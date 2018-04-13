@@ -47,7 +47,7 @@ func init() {
             "type": "integer",
             "description": "user id",
             "name": "user_id",
-            "in": "formData"
+            "in": "query"
           }
         ],
         "responses": {
@@ -124,7 +124,7 @@ func init() {
             "type": "integer",
             "description": "user id",
             "name": "user_id",
-            "in": "formData"
+            "in": "query"
           }
         ],
         "responses": {
