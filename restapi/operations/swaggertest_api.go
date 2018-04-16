@@ -37,7 +37,7 @@ func NewSwaggertestAPI(spec *loads.Document) *SwaggertestAPI {
 		BasicAuthenticator:  security.BasicAuth,
 		APIKeyAuthenticator: security.APIKeyAuth,
 		BearerAuthenticator: security.BearerAuth,
-		UrlformConsumer:     runtime.DiscardConsumer,
+		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
 		UserGetSearchHandler: user.GetSearchHandlerFunc(func(params user.GetSearchParams) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetSearch has not yet been implemented")
@@ -67,8 +67,8 @@ type SwaggertestAPI struct {
 	// It has a default implemention in the security package, however you can replace it for your particular usage.
 	BearerAuthenticator func(string, security.ScopedTokenAuthentication) runtime.Authenticator
 
-	// UrlformConsumer registers a consumer for a "application/x-www-form-urlencoded" mime type
-	UrlformConsumer runtime.Consumer
+	// JSONConsumer registers a consumer for a "application/json" mime type
+	JSONConsumer runtime.Consumer
 
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
@@ -130,8 +130,8 @@ func (o *SwaggertestAPI) RegisterFormat(name string, format strfmt.Format, valid
 func (o *SwaggertestAPI) Validate() error {
 	var unregistered []string
 
-	if o.UrlformConsumer == nil {
-		unregistered = append(unregistered, "UrlformConsumer")
+	if o.JSONConsumer == nil {
+		unregistered = append(unregistered, "JSONConsumer")
 	}
 
 	if o.JSONProducer == nil {
@@ -175,8 +175,8 @@ func (o *SwaggertestAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Co
 	for _, mt := range mediaTypes {
 		switch mt {
 
-		case "application/x-www-form-urlencoded":
-			result["application/x-www-form-urlencoded"] = o.UrlformConsumer
+		case "application/json":
+			result["application/json"] = o.JSONConsumer
 
 		}
 

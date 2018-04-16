@@ -9,11 +9,17 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+
+	"github.com/go-openapi/swag"
 )
 
 // GetSearchURL generates an URL for the get search operation
 type GetSearchURL struct {
+	UserID int32
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
@@ -42,6 +48,15 @@ func (o *GetSearchURL) Build() (*url.URL, error) {
 		_basePath = "/"
 	}
 	result.Path = golangswaggerpaths.Join(_basePath, _path)
+
+	qs := make(url.Values)
+
+	userID := swag.FormatInt32(o.UserID)
+	if userID != "" {
+		qs.Set("user_id", userID)
+	}
+
+	result.RawQuery = qs.Encode()
 
 	return &result, nil
 }

@@ -12,7 +12,7 @@ swaggertest
     Version: 0.0.1
 
     Consumes:
-    - application/x-www-form-urlencoded
+    - application/json
 
     Produces:
     - application/json

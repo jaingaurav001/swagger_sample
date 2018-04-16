@@ -18,6 +18,9 @@ var (
 
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
   "produces": [
     "application/json"
   ],
@@ -35,9 +38,6 @@ func init() {
   "paths": {
     "/search": {
       "get": {
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
         "tags": [
           "user"
         ],
@@ -48,7 +48,7 @@ func init() {
             "format": "int32",
             "description": "user id",
             "name": "user_id",
-            "in": "formData",
+            "in": "query",
             "required": true
           }
         ],
@@ -90,13 +90,17 @@ func init() {
         },
         "user_id": {
           "description": "user id",
-          "type": "integer"
+          "type": "integer",
+          "format": "int32"
         }
       }
     }
   }
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
   "produces": [
     "application/json"
   ],
@@ -114,9 +118,6 @@ func init() {
   "paths": {
     "/search": {
       "get": {
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
         "tags": [
           "user"
         ],
@@ -127,7 +128,7 @@ func init() {
             "format": "int32",
             "description": "user id",
             "name": "user_id",
-            "in": "formData",
+            "in": "query",
             "required": true
           }
         ],
@@ -169,7 +170,8 @@ func init() {
         },
         "user_id": {
           "description": "user id",
-          "type": "integer"
+          "type": "integer",
+          "format": "int32"
         }
       }
     }

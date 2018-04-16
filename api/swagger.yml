@@ -7,20 +7,20 @@ host: localhost:8000
 schemes:
   - http
 basePath: /
+consumes:
+  - application/json
 produces:
   - application/json
 paths:
   '/search':
     get:
       summary: get user information
-      consumes:
-        - application/x-www-form-urlencoded
       tags:
         - user
       parameters:
         - name: user_id
           type: integer
-          in: formData
+          in: query
           format: int32
           required: true
           description: user id
@@ -41,6 +41,7 @@ definitions:
     properties:
       user_id:
         type: integer
+        format: int32
         description: user id
       name:
         type: string

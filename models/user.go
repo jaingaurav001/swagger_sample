@@ -22,7 +22,7 @@ type User struct {
 
 	// user id
 	// Required: true
-	UserID *int64 `json:"user_id"`
+	UserID *int32 `json:"user_id"`
 }
 
 // Validate validates this user

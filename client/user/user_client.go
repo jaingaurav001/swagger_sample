@@ -38,7 +38,7 @@ func (a *Client) GetSearch(params *GetSearchParams) (*GetSearchOK, error) {
 		Method:             "GET",
 		PathPattern:        "/search",
 		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/x-www-form-urlencoded"},
+		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
 		Reader:             &GetSearchReader{formats: a.formats},

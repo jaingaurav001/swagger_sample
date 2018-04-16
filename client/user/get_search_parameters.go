@@ -126,11 +126,11 @@ func (o *GetSearchParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 	}
 	var res []error
 
-	// form param user_id
-	frUserID := o.UserID
-	fUserID := swag.FormatInt32(frUserID)
-	if fUserID != "" {
-		if err := r.SetFormParam("user_id", fUserID); err != nil {
+	// query param user_id
+	qrUserID := o.UserID
+	qUserID := swag.FormatInt32(qrUserID)
+	if qUserID != "" {
+		if err := r.SetQueryParam("user_id", qUserID); err != nil {
 			return err
 		}
 	}

@@ -8,7 +8,7 @@ import (
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
-	//	middleware "github.com/go-openapi/runtime/middleware"
+	//middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
 
 	"github.com/jaingaurav001/swagger_sample/restapi/operations"
@@ -31,13 +31,13 @@ func configureAPI(api *operations.SwaggertestAPI) http.Handler {
 	// Example:
 	// api.Logger = log.Printf
 
-	api.UrlformConsumer = runtime.DiscardConsumer
+	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	//	api.UserGetSearchHandler = user.GetSearchHandlerFunc(func(params user.GetSearchParams) middleware.Responder {
-	//		return middleware.NotImplemented("operation user.GetSearch has not yet been implemented")
-	//	})
+	//api.UserGetSearchHandler = user.GetSearchHandlerFunc(func(params user.GetSearchParams) middleware.Responder {
+	//	return middleware.NotImplemented("operation user.GetSearch has not yet been implemented")
+	//})
 	api.UserGetSearchHandler = user.GetSearchHandlerFunc(user.Search)
 
 	api.ServerShutdown = func() {}
